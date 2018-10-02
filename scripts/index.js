@@ -47,6 +47,7 @@ const fetchVideos = function(searchTerm, callback) {
 };
 
 
+
 /**
  * @function decorateResponse
  * Uses Youtube API response to create an array of "decorated" video objects as 
@@ -63,8 +64,18 @@ const fetchVideos = function(searchTerm, callback) {
 // TEST IT! Grab an example API response and send it into the function - make sure
 // you get back the object you want.
 const decorateResponse = function(response) {
-  store.map(item => response.id )
+  return response.items.map( item => {
+    return { 
+      id: item.id.videoId,
+      title: item.snippet.title,
+      thumbnail: item.snippet.thumbnails.default.url  
+    };
+  });
 };
+
+fetchVideos('dog', response => {
+  console.log(response);
+});
 
 /**
  * @function generateVideoItemHtml
