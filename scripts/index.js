@@ -73,9 +73,6 @@ const decorateResponse = function(response) {
   });
 };
 
-fetchVideos('dog', response => {
-  console.log(response);
-});
 
 /**
  * @function generateVideoItemHtml
@@ -87,8 +84,19 @@ fetchVideos('dog', response => {
 // 1. Using the decorated object, return an HTML string containing all the expected
 // TEST IT!
 const generateVideoItemHtml = function(video) {
-
+  return `
+  <div>
+    <img src="${video.thumbnail}" alt="${video.title}" target="youtube.com/${video.id}"/>
+  </div>
+  `;
 };
+
+console.log(fetchVideos('dog', response => {
+  let found = decorateResponse(response);
+  return found.map( video => {
+    generateVideoItemHtml(video);
+  });
+}));
 
 /**
  * @function addVideosToStore
