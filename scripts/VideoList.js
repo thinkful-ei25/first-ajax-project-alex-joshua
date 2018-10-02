@@ -9,6 +9,9 @@ const videoList = (function() {
           <a href="https://www.youtube.com/watch?v=${video.id}" target="_blank">
           <img src="${video.thumbnail}" alt="${video.title}"/>
           </a>
+          <br><a href="https://www.youtube.com/channel/${video.channelId}" target="_blank">
+          Check out more from ${video.channelTitle}
+          </a>
         </div>
       </li>
     `;
@@ -19,7 +22,9 @@ const videoList = (function() {
       return { 
         id: item.id.videoId,
         title: item.snippet.title,
-        thumbnail: item.snippet.thumbnails.default.url  
+        thumbnail: item.snippet.thumbnails.default.url,
+        channelTitle: item.snippet.channelTitle,
+        channelId: item.snippet.channelId
       };
     });
   };
