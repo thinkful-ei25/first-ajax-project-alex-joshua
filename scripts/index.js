@@ -85,18 +85,14 @@ const decorateResponse = function(response) {
 // TEST IT!
 const generateVideoItemHtml = function(video) {
   return `
-  <div>
-    <img src="${video.thumbnail}" alt="${video.title}" target="youtube.com/${video.id}"/>
-  </div>
-  `;
+    <li data-video-id="${video.id}">
+      <h3>${video.title}</h3> 
+      <div>
+        <img src="${video.thumbnail}" alt="${video.title}"/>
+      </div>
+    </li>
+    `;
 };
-
-console.log(fetchVideos('dog', response => {
-  let found = decorateResponse(response);
-  return found.map( video => {
-    generateVideoItemHtml(video);
-  });
-}));
 
 /**
  * @function addVideosToStore
@@ -107,9 +103,8 @@ console.log(fetchVideos('dog', response => {
 // 1. Set the received array as the value held in store.videos
 // TEST IT!
 const addVideosToStore = function(videos) {
-
+  store.videos = videos;
 };
-
 
 /**
  * @function render
@@ -120,7 +115,9 @@ const addVideosToStore = function(videos) {
 // 2. Add this array of DOM elements to the appropriate DOM element
 // TEST IT!
 const render = function() {
-
+  const search = store.videos.map( video => generateVideoItemHtml(video));
+  search.join('');
+  $('.results').html(search);
 };
 
 /**
@@ -140,11 +137,21 @@ const render = function() {
 //   g) Inside the callback, run the `render` function 
 // TEST IT!
 const handleFormSubmit = function() {
-
+  $('form').submit(event => {
+    event.preventDefault();
+    let input = $('#search-term').val();
+    $('#search-term').val('');
+    fetchVideos(input, response => {
+      const decorated = decorateResponse(response);
+      addVideosToStore(decorated);
+      render();
+    });
+  });
 };
 
 // When DOM is ready:
 $(function () {
   // TASK:
   // 1. Run `handleFormSubmit` to bind the event listener to the DOM
+  handleFormSubmit();
 });
